@@ -61,3 +61,12 @@ To access VS Code Server, append your token to the URL: `https://localhost:3001/
 ## Customization
 
 To add more tools, fork this repo and modify the Dockerfile.
+
+## Acknowledgments
+
+This project builds upon the following Docker images:
+- [Ruby 3.4.4 Slim](https://hub.docker.com/_/ruby) - Official Ruby Docker image
+- [Node.js 20 Slim](https://hub.docker.com/_/node) - Official Node.js Docker image  
+- [Gitpod OpenVSCode Server](https://github.com/gitpod-io/openvscode-server) - Browser-based VS Code experience
+
+Thank you to the maintainers of these projects for providing high-quality base images.
