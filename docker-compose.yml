@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  code-server:
+    build: .
+    container_name: code-server-https
+    ports:
+      - "8443:8443"
+      - "3000:3000"  # Rails app
+    environment:
+      - PASSWORD=changeme
+    volumes:
+      - ./workspace:/home/coder/workspace
+      - code-server-data:/home/coder/.local/share/code-server
+      - code-server-config:/home/coder/.config/code-server
+
+volumes:
+  code-server-data:
+  code-server-config:
