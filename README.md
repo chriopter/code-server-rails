@@ -61,6 +61,48 @@ This image enforces token-based authentication for security. You must set the `V
 
 To access VS Code Server, append your token to the URL: `https://localhost:3001/?tkn=your-token-here`. This ensures only authorized users can access your development environment.
 
+## GitHub Authentication
+
+VS Code Server in the browser requires special setup for persistent GitHub authentication. This image includes GitHub CLI and a setup script to make this process smooth.
+
+### First-Time Setup
+
+1. Access your VS Code Server instance
+2. Open the terminal (Ctrl+`)
+3. Run the setup script:
+   ```bash
+   github-setup
+   ```
+4. Follow the prompts to:
+   - Create a GitHub Personal Access Token
+   - Configure git credentials
+   - Set up persistent authentication
+
+### Manual Setup (Alternative)
+
+If you prefer to set up manually:
+
+```bash
+# 1. Create a GitHub token at https://github.com/settings/tokens/new
+# Select scopes: repo, workflow, read:org
+
+# 2. Configure GitHub CLI
+echo "your-ghp-token" | gh auth login --with-token --git-protocol https
+
+# 3. Configure Git
+git config --global user.name "your-username"
+git config --global user.email "your-email@example.com"
+git config --global credential.helper store
+gh auth setup-git
+
+# 4. Store credentials
+printf "protocol=https\nhost=github.com\nusername=your-username\npassword=your-ghp-token\n" | git credential-store store
+```
+
+### Why is this needed?
+
+Browser-based VS Code has limitations with OAuth tokens - they're stored in browser session storage and lost on refresh. This setup uses GitHub CLI to store credentials server-side, providing persistent authentication that survives browser refreshes and container restarts.
+
 ## Customization
 
 To add more tools, fork this repo and modify the Dockerfile.

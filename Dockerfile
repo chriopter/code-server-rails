@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     libyaml-0-2 libgmp10 \
     build-essential libpq-dev \
     gnome-keyring libsecret-1-0 dbus-x11 \
+    software-properties-common \
     && curl -Lo /usr/local/bin/mkcert https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-linux-amd64 \
     && chmod +x /usr/local/bin/mkcert \
     && rm -rf /var/lib/apt/lists/* \
@@ -35,6 +36,12 @@ RUN apt-get update && apt-get install -y \
         } \
     }' > /etc/nginx/sites-available/default
 
+# Install GitHub CLI
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list && \
+    apt-get update && apt-get install -y gh && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install gems and npm packages
 RUN gem install bundler rails foreman --no-document && \
     npm install -g @anthropic-ai/claude-code
@@ -48,9 +55,10 @@ RUN mkdir -p ~/.openvscode-server/data/User && \
 
 USER root
 
-# Add entrypoint script
+# Add scripts
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY github-setup.sh /usr/local/bin/github-setup
+RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/github-setup
 
 WORKDIR /workspace
 
