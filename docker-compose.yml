@@ -1,6 +1,6 @@
 services:
   code-server:
-    build: .
+    image: ghcr.io/chriopter/vscode-server-rails:main
     container_name: code-server-rails
     ports:
       - "8443:8443"  # VS Code Server
