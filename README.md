@@ -11,27 +11,8 @@ A Docker environment for VS Code in the browser with Ruby on Rails, Node.js, and
 - PostgreSQL & Redis clients
 - Persistent storage for settings and workspace
 
-## Docker Compose Example
+## Docker Compose
 
-```yaml
-services:
-  code-server:
-    build: .
-    container_name: code-server-rails
-    ports:
-      - "8443:8443"  # VS Code Server
-      - "3000:3000"  # Rails app
-    environment:
-      - PASSWORD=changeme
-    volumes:
-      - ./workspace:/home/coder/workspace
-      - code-server-data:/home/coder/.local/share/code-server
-      - code-server-config:/home/coder/.config/code-server
-    restart: unless-stopped
-
-volumes:
-  code-server-data:
-  code-server-config:
-```
+See [docker-compose.yml](docker-compose.yml)
 
 Access at https://localhost:8443 with password `changeme`.

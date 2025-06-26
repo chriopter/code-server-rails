@@ -26,7 +26,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | g
     rm -rf /var/lib/apt/lists/*
 
 # Install gems and npm packages
-RUN gem install bundler rails foreman --no-document && \
+RUN gem install bundler rails foreman ruby-lsp --no-document && \
     npm install -g @anthropic-ai/claude-code
 
 # Setup code-server user (coder) with sudo access

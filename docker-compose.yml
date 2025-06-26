@@ -1,11 +1,9 @@
-version: '3.8'
-
 services:
   code-server:
     build: .
-    container_name: code-server-https
+    container_name: code-server-rails
     ports:
-      - "8443:8443"
+      - "8443:8443"  # VS Code Server
       - "3000:3000"  # Rails app
     environment:
       - PASSWORD=changeme
@@ -13,7 +11,10 @@ services:
       - ./workspace:/home/coder/workspace
       - code-server-data:/home/coder/.local/share/code-server
       - code-server-config:/home/coder/.config/code-server
+      - coder-home:/home/coder
+    restart: unless-stopped
 
 volumes:
   code-server-data:
   code-server-config:
+  coder-home:
