@@ -70,13 +70,21 @@ VS Code Server in the browser requires special setup for persistent GitHub authe
 1. Access your VS Code Server instance
 2. Open the terminal (Ctrl+`)
 3. Run the setup script:
+   
+   **Interactive mode:**
    ```bash
    github-setup
    ```
-4. Follow the prompts to:
-   - Create a GitHub Personal Access Token
-   - Configure git credentials
-   - Set up persistent authentication
+   
+   **Quick mode (if you already have a token):**
+   ```bash
+   github-setup ghp_your_token_here
+   ```
+
+4. The script will:
+   - Configure GitHub CLI with your token
+   - Set up git credentials
+   - Enable persistent authentication
 
 ### Manual Setup (Alternative)
 

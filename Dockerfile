@@ -51,6 +51,8 @@ USER openvscode-server
 RUN mkdir -p ~/.openvscode-server/data/User && \
     mkdir -p ~/.openvscode-server/data/Machine && \
     mkdir -p ~/.openvscode-server/extensions && \
+    mkdir -p ~/.config && \
+    mkdir -p ~/.local/share && \
     /home/.openvscode-server/bin/openvscode-server --install-extension Shopify.ruby-extensions-pack
 
 USER root
