@@ -9,7 +9,7 @@ A Docker image for browser-based development with VS Code Server, Ruby 3.4.4, No
 ```yaml
 services:
   vscode-server:
-    image: ghcr.io/chriopter/vscode-server-rails:latest
+    image: ghcr.io/chriopter/vscode-server-rails:main
     container_name: vscode-server
     ports:
       - "3001:3001"  # VS Code HTTPS
