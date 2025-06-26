@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-# Ensure workspace directory exists
+# Ensure workspace directory exists and fix permissions
 mkdir -p /home/coder/workspace
-chown coder:coder /home/coder/workspace
+chown -R coder:coder /home/coder
 
 # Validate password is set
 if [ -z "$PASSWORD" ]; then

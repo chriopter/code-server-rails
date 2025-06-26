@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y \
     postgresql-client redis-tools curl git sudo \
     libyaml-0-2 libgmp10 libyaml-dev \
     build-essential libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -sf /usr/bin/git /usr/local/bin/git
 
 # Install GitHub CLI
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg && \
@@ -35,6 +36,11 @@ RUN usermod -aG sudo coder && \
 
 # Configure user environment
 USER coder
+
+# Set environment variables for bundler
+ENV GEM_HOME=/home/coder/.bundle
+ENV BUNDLE_PATH=/home/coder/.bundle
+ENV PATH="/home/coder/.local/bin:${PATH}"
 RUN mkdir -p ~/.config/code-server && \
     mkdir -p ~/.config/gh && \
     mkdir -p ~/.local/share && \
@@ -49,7 +55,10 @@ RUN bundle config set --global path /home/coder/.bundle && \
     mkdir -p /home/coder/.bundle /home/coder/.local/bin && \
     echo 'export PATH="/home/coder/.local/bin:$PATH"' >> ~/.bashrc && \
     echo 'export GEM_HOME="/home/coder/.bundle"' >> ~/.bashrc && \
-    echo 'export BUNDLE_PATH="/home/coder/.bundle"' >> ~/.bashrc
+    echo 'export BUNDLE_PATH="/home/coder/.bundle"' >> ~/.bashrc && \
+    echo 'export PATH="/home/coder/.local/bin:$PATH"' >> ~/.profile && \
+    echo 'export GEM_HOME="/home/coder/.bundle"' >> ~/.profile && \
+    echo 'export BUNDLE_PATH="/home/coder/.bundle"' >> ~/.profile
 
 # Set terminal default directory and handle missing directories
 RUN echo '# Ensure we start in a valid directory' >> ~/.bashrc && \
