@@ -15,7 +15,7 @@ RUN ln -s /usr/local/bin/node /usr/local/bin/nodejs && \
 # Install system packages and Ruby runtime dependencies
 RUN apt-get update && apt-get install -y \
     postgresql-client redis-tools nginx curl git \
-    libyaml-0-2 libgmp10 \
+    libyaml-0-2 libgmp10 libyaml-dev \
     build-essential libpq-dev \
     gnome-keyring libsecret-1-0 dbus-x11 \
     software-properties-common \
