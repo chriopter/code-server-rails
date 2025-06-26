@@ -17,7 +17,8 @@ services:
     volumes:
       - vscode-user-data:/home/openvscode-server
       - vscode-server-data:/home/.openvscode-server
-      - ./:/workspace
+      - ./:/workspace  # Your project files
+      - vscode-config:/home/openvscode-server/.config  # Persist auth & settings
     environment:
       - VSCODE_CONNECTION_TOKEN=your-secure-token-here
     restart: unless-stopped
@@ -25,6 +26,7 @@ services:
 volumes:
   vscode-user-data:
   vscode-server-data:
+  vscode-config:
 ```
 
 2. Generate a secure token:
@@ -51,6 +53,7 @@ docker compose up -d
 - HTTPS with self-signed certificates
 - Persistent extensions and settings
 - Token-based authentication (required)
+- Persistent authentication (GitHub, etc.) via config volume
 
 ## Security
 

@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     postgresql-client redis-tools nginx curl git \
     libyaml-0-2 libgmp10 \
     build-essential libpq-dev \
+    gnome-keyring libsecret-1-0 dbus-x11 \
     && curl -Lo /usr/local/bin/mkcert https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-linux-amd64 \
     && chmod +x /usr/local/bin/mkcert \
     && rm -rf /var/lib/apt/lists/* \
