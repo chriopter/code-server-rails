@@ -51,11 +51,13 @@ USER openvscode-server
 RUN mkdir -p ~/.openvscode-server/data/User && \
     mkdir -p ~/.openvscode-server/data/Machine && \
     mkdir -p ~/.openvscode-server/extensions && \
-    mkdir -p ~/.config && \
+    mkdir -p ~/.config/gh && \
     mkdir -p ~/.local/share && \
     /home/.openvscode-server/bin/openvscode-server --install-extension Shopify.ruby-extensions-pack
 
+# Ensure proper ownership  
 USER root
+RUN chown -R openvscode-server:openvscode-server /home/openvscode-server/.config
 
 # Add scripts
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
