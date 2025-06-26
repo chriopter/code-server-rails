@@ -30,6 +30,13 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | g
 RUN gem install bundler rails foreman ruby-lsp --no-document && \
     npm install -g @anthropic-ai/claude-code
 
+# Configure bundler globally for all users
+RUN bundle config set --global path /home/coder/.bundle && \
+    bundle config set --global bin /home/coder/.local/bin && \
+    bundle config set --global cache_path /home/coder/.bundle/cache && \
+    bundle config set --global cache_all true && \
+    bundle config set --global disable_shared_gems true
+
 # Setup code-server user (coder) with sudo access
 RUN usermod -aG sudo coder && \
     echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
@@ -52,6 +59,8 @@ RUN mkdir -p ~/.config/code-server && \
 RUN bundle config set --global path /home/coder/.bundle && \
     bundle config set --global bin /home/coder/.local/bin && \
     bundle config set --global cache_path /home/coder/.bundle/cache && \
+    bundle config set --global cache_all true && \
+    bundle config set --global disable_shared_gems true && \
     mkdir -p /home/coder/.bundle /home/coder/.local/bin && \
     echo 'export PATH="/home/coder/.local/bin:$PATH"' >> ~/.bashrc && \
     echo 'export GEM_HOME="/home/coder/.bundle"' >> ~/.bashrc && \
