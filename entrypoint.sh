@@ -5,6 +5,24 @@ set -e
 mkdir -p /home/coder/workspace
 chown coder:coder /home/coder/workspace
 
+# Validate password is set
+if [ -z "$PASSWORD" ]; then
+    echo "ERROR: PASSWORD environment variable must be set"
+    echo "Please set it in your docker-compose.yml or pass it via -e PASSWORD=yourpassword"
+    exit 1
+fi
+
+# Update code-server config with new password
+mkdir -p /home/coder/.config/code-server
+cat > /home/coder/.config/code-server/config.yaml <<EOF
+bind-addr: 0.0.0.0:8443
+auth: password
+password: $PASSWORD
+cert: /home/coder/certs/code-server.crt
+cert-key: /home/coder/certs/code-server.key
+EOF
+chown -R coder:coder /home/coder/.config
+
 # Create certificates if they don't exist
 if [ ! -f /home/coder/certs/code-server.crt ] || [ ! -f /home/coder/certs/code-server.key ]; then
     echo "Generating self-signed certificates..."
