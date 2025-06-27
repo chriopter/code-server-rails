@@ -76,12 +76,17 @@ RUN bundle config set --global path /home/coder/.bundle && \
     echo 'export GEM_HOME="/home/coder/.bundle"' >> ~/.profile && \
     echo 'export BUNDLE_PATH="/home/coder/.bundle"' >> ~/.profile
 
-# Create .bashrc file for coder user (VS Code may need this)
+# Create .bashrc file for coder user with all necessary configs
 RUN touch ~/.bashrc && \
     echo '# Ensure we start in a valid directory' >> ~/.bashrc && \
     echo 'if [ ! -d "$PWD" ]; then' >> ~/.bashrc && \
     echo '    cd /home/coder' >> ~/.bashrc && \
-    echo 'fi' >> ~/.bashrc
+    echo 'fi' >> ~/.bashrc && \
+    echo '' >> ~/.bashrc && \
+    echo '# Always load aliases and history settings' >> ~/.bashrc && \
+    echo 'export HISTFILE=/commandhistory/.bash_history' >> ~/.bashrc && \
+    echo 'export PROMPT_COMMAND="history -a"' >> ~/.bashrc && \
+    echo 'test -f /commandhistory/.bash_aliases && source /commandhistory/.bash_aliases' >> ~/.bashrc
 
 # Create commandhistory directory with proper permissions
 USER root
@@ -110,6 +115,12 @@ RUN mkdir -p /commandhistory && \
     echo 'if [ -z "$ALIASES_LOADED" ]; then' >> /etc/bash.bashrc && \
     echo '    test -f /commandhistory/.bash_aliases && source /commandhistory/.bash_aliases' >> /etc/bash.bashrc && \
     echo '    export ALIASES_LOADED=1' >> /etc/bash.bashrc && \
+    echo 'fi' >> /etc/bash.bashrc && \
+    echo '' >> /etc/bash.bashrc && \
+    echo '# VS Code terminal fix - always source our configs' >> /etc/bash.bashrc && \
+    echo 'if [[ "$TERM_PROGRAM" == "vscode" ]] || [[ -n "$VSCODE_INJECTION" ]]; then' >> /etc/bash.bashrc && \
+    echo '    export HISTFILE=/commandhistory/.bash_history' >> /etc/bash.bashrc && \
+    echo '    test -f /commandhistory/.bash_aliases && source /commandhistory/.bash_aliases' >> /etc/bash.bashrc && \
     echo 'fi' >> /etc/bash.bashrc
 
 # Generate self-signed certificate in user-accessible location
@@ -122,7 +133,9 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 # Add scripts
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY github-setup.sh /usr/local/bin/github-setup
-RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/github-setup
+COPY bash-wrapper.sh /usr/local/bin/bash-wrapper
+RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/github-setup /usr/local/bin/bash-wrapper && \
+    ln -sf /usr/local/bin/bash-wrapper /usr/local/bin/bash-persistent
 
 WORKDIR /home/coder/workspace
 
