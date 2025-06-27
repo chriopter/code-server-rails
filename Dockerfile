@@ -76,24 +76,11 @@ RUN bundle config set --global path /home/coder/.bundle && \
     echo 'export GEM_HOME="/home/coder/.bundle"' >> ~/.profile && \
     echo 'export BUNDLE_PATH="/home/coder/.bundle"' >> ~/.profile
 
-# Set terminal default directory and handle missing directories
-RUN echo '# Ensure we start in a valid directory' >> ~/.bashrc && \
+# Create .bashrc file for coder user (VS Code may need this)
+RUN touch ~/.bashrc && \
+    echo '# Ensure we start in a valid directory' >> ~/.bashrc && \
     echo 'if [ ! -d "$PWD" ]; then' >> ~/.bashrc && \
     echo '    cd /home/coder' >> ~/.bashrc && \
-    echo 'fi' >> ~/.bashrc && \
-    echo '' >> ~/.bashrc && \
-    echo '# Persist bash history' >> ~/.bashrc && \
-    echo 'export PROMPT_COMMAND="history -a"' >> ~/.bashrc && \
-    echo 'export HISTFILE=/commandhistory/.bash_history' >> ~/.bashrc && \
-    echo 'export HISTSIZE=10000' >> ~/.bashrc && \
-    echo 'export HISTFILESIZE=20000' >> ~/.bashrc && \
-    echo 'export HISTCONTROL=ignoredups:erasedups' >> ~/.bashrc && \
-    echo 'shopt -s histappend' >> ~/.bashrc && \
-    echo 'export HISTTIMEFORMAT="%F %T "' >> ~/.bashrc && \
-    echo '' >> ~/.bashrc && \
-    echo '# Source bash aliases if exists' >> ~/.bashrc && \
-    echo 'if [ -f /commandhistory/.bash_aliases ]; then' >> ~/.bashrc && \
-    echo '    . /commandhistory/.bash_aliases' >> ~/.bashrc && \
     echo 'fi' >> ~/.bashrc
 
 # Create commandhistory directory with proper permissions
@@ -113,7 +100,11 @@ RUN mkdir -p /commandhistory && \
     echo 'shopt -s histappend' >> /etc/bash.bashrc && \
     echo 'if [ -f /commandhistory/.bash_aliases ]; then' >> /etc/bash.bashrc && \
     echo '    . /commandhistory/.bash_aliases' >> /etc/bash.bashrc && \
-    echo 'fi' >> /etc/bash.bashrc
+    echo 'fi' >> /etc/bash.bashrc && \
+    echo '' >> /etc/bash.bashrc && \
+    echo '# Force history settings even if VS Code overrides them' >> /etc/bash.bashrc && \
+    echo 'export HISTFILE=/commandhistory/.bash_history' >> /etc/bash.bashrc && \
+    echo 'export PROMPT_COMMAND="history -a;${PROMPT_COMMAND}"' >> /etc/bash.bashrc
 
 # Generate self-signed certificate in user-accessible location
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
