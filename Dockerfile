@@ -62,6 +62,7 @@ RUN bundle config set --global path /home/coder/.bundle && \
     bundle config set --global cache_all true && \
     bundle config set --global disable_shared_gems true && \
     mkdir -p /home/coder/.bundle /home/coder/.local/bin && \
+    touch ~/.bashrc && \
     echo 'export PATH="/home/coder/.local/bin:$PATH"' >> ~/.bashrc && \
     echo 'export GEM_HOME="/home/coder/.bundle"' >> ~/.bashrc && \
     echo 'export BUNDLE_PATH="/home/coder/.bundle"' >> ~/.bashrc && \
@@ -70,8 +71,7 @@ RUN bundle config set --global path /home/coder/.bundle && \
     echo 'export BUNDLE_PATH="/home/coder/.bundle"' >> ~/.profile
 
 # Set terminal default directory and handle missing directories
-RUN touch ~/.bashrc && \
-    echo '# Ensure we start in a valid directory' >> ~/.bashrc && \
+RUN echo '# Ensure we start in a valid directory' >> ~/.bashrc && \
     echo 'if [ ! -d "$PWD" ]; then' >> ~/.bashrc && \
     echo '    cd /home/coder' >> ~/.bashrc && \
     echo 'fi' >> ~/.bashrc && \
