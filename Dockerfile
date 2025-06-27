@@ -16,7 +16,7 @@ RUN ln -s /usr/local/bin/node /usr/local/bin/nodejs && \
 RUN apt-get update && apt-get install -y \
     postgresql-client redis-tools curl git sudo \
     libyaml-0-2 libgmp10 libyaml-dev \
-    build-essential libpq-dev \
+    build-essential libpq-dev watchman \
     && rm -rf /var/lib/apt/lists/* \
     && ln -sf /usr/bin/git /usr/local/bin/git
 
