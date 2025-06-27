@@ -73,7 +73,22 @@ RUN bundle config set --global path /home/coder/.bundle && \
 RUN echo '# Ensure we start in a valid directory' >> ~/.bashrc && \
     echo 'if [ ! -d "$PWD" ]; then' >> ~/.bashrc && \
     echo '    cd /home/coder' >> ~/.bashrc && \
-    echo 'fi' >> ~/.bashrc
+    echo 'fi' >> ~/.bashrc && \
+    echo '' >> ~/.bashrc && \
+    echo '# Enhanced bash history configuration' >> ~/.bashrc && \
+    echo 'export HISTSIZE=10000' >> ~/.bashrc && \
+    echo 'export HISTFILESIZE=20000' >> ~/.bashrc && \
+    echo 'export HISTCONTROL=ignoredups:erasedups' >> ~/.bashrc && \
+    echo 'shopt -s histappend' >> ~/.bashrc && \
+    echo 'export HISTTIMEFORMAT="%F %T "' >> ~/.bashrc && \
+    echo '' >> ~/.bashrc && \
+    echo '# Source bash aliases if exists' >> ~/.bashrc && \
+    echo 'if [ -f ~/.bash_aliases ]; then' >> ~/.bashrc && \
+    echo '    . ~/.bash_aliases' >> ~/.bashrc && \
+    echo 'fi' >> ~/.bashrc && \
+    echo '' >> ~/.bashrc && \
+    echo '# Create bash history file if it does not exist' >> ~/.bashrc && \
+    echo 'touch ~/.bash_history' >> ~/.bashrc
 
 # Generate self-signed certificate in user-accessible location
 USER root
