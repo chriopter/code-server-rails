@@ -16,3 +16,4 @@ A Docker environment for VS Code in the browser with Ruby on Rails, Node.js, and
 See [docker-compose.yml](docker-compose.yml)
 
 Access at https://localhost:8443 with password `changeme`.
+ 
