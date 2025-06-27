@@ -12,9 +12,11 @@ services:
       - code-server-data:/home/coder/.local/share/code-server
       - code-server-config:/home/coder/.config/code-server
       - coder-home:/home/coder
+      - coder-commandhistory:/commandhistory
     restart: unless-stopped
 
 volumes:
   code-server-data:
   code-server-config:
   coder-home:
+  coder-commandhistory:

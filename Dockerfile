@@ -75,7 +75,9 @@ RUN echo '# Ensure we start in a valid directory' >> ~/.bashrc && \
     echo '    cd /home/coder' >> ~/.bashrc && \
     echo 'fi' >> ~/.bashrc && \
     echo '' >> ~/.bashrc && \
-    echo '# Enhanced bash history configuration' >> ~/.bashrc && \
+    echo '# Persist bash history' >> ~/.bashrc && \
+    echo 'export PROMPT_COMMAND="history -a"' >> ~/.bashrc && \
+    echo 'export HISTFILE=/commandhistory/.bash_history' >> ~/.bashrc && \
     echo 'export HISTSIZE=10000' >> ~/.bashrc && \
     echo 'export HISTFILESIZE=20000' >> ~/.bashrc && \
     echo 'export HISTCONTROL=ignoredups:erasedups' >> ~/.bashrc && \
@@ -83,15 +85,19 @@ RUN echo '# Ensure we start in a valid directory' >> ~/.bashrc && \
     echo 'export HISTTIMEFORMAT="%F %T "' >> ~/.bashrc && \
     echo '' >> ~/.bashrc && \
     echo '# Source bash aliases if exists' >> ~/.bashrc && \
-    echo 'if [ -f ~/.bash_aliases ]; then' >> ~/.bashrc && \
-    echo '    . ~/.bash_aliases' >> ~/.bashrc && \
-    echo 'fi' >> ~/.bashrc && \
-    echo '' >> ~/.bashrc && \
-    echo '# Create bash history file if it does not exist' >> ~/.bashrc && \
-    echo 'touch ~/.bash_history' >> ~/.bashrc
+    echo 'if [ -f /commandhistory/.bash_aliases ]; then' >> ~/.bashrc && \
+    echo '    . /commandhistory/.bash_aliases' >> ~/.bashrc && \
+    echo 'fi' >> ~/.bashrc
+
+# Create commandhistory directory with proper permissions
+USER root
+RUN mkdir -p /commandhistory && \
+    touch /commandhistory/.bash_history && \
+    touch /commandhistory/.bash_aliases && \
+    chown -R coder:coder /commandhistory && \
+    chmod 755 /commandhistory
 
 # Generate self-signed certificate in user-accessible location
-USER root
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout /home/coder/certs/code-server.key \
     -out /home/coder/certs/code-server.crt \
