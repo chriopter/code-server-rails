@@ -48,6 +48,12 @@ USER coder
 ENV GEM_HOME=/home/coder/.bundle
 ENV BUNDLE_PATH=/home/coder/.bundle
 ENV PATH="/home/coder/.local/bin:${PATH}"
+# Set bash history environment variables globally
+ENV HISTFILE=/commandhistory/.bash_history
+ENV HISTSIZE=10000
+ENV HISTFILESIZE=20000
+ENV HISTCONTROL=ignoredups:erasedups
+ENV HISTTIMEFORMAT="%F %T "
 RUN mkdir -p ~/.config/code-server && \
     mkdir -p ~/.config/gh && \
     mkdir -p ~/.local/share && \
@@ -96,7 +102,18 @@ RUN mkdir -p /commandhistory && \
     touch /commandhistory/.bash_history && \
     touch /commandhistory/.bash_aliases && \
     chown -R coder:coder /commandhistory && \
-    chmod 755 /commandhistory
+    chmod 755 /commandhistory && \
+    echo '' >> /etc/bash.bashrc && \
+    echo '# Persist bash history for all users' >> /etc/bash.bashrc && \
+    echo 'export PROMPT_COMMAND="history -a"' >> /etc/bash.bashrc && \
+    echo 'export HISTFILE=/commandhistory/.bash_history' >> /etc/bash.bashrc && \
+    echo 'export HISTSIZE=10000' >> /etc/bash.bashrc && \
+    echo 'export HISTFILESIZE=20000' >> /etc/bash.bashrc && \
+    echo 'export HISTCONTROL=ignoredups:erasedups' >> /etc/bash.bashrc && \
+    echo 'shopt -s histappend' >> /etc/bash.bashrc && \
+    echo 'if [ -f /commandhistory/.bash_aliases ]; then' >> /etc/bash.bashrc && \
+    echo '    . /commandhistory/.bash_aliases' >> /etc/bash.bashrc && \
+    echo 'fi' >> /etc/bash.bashrc
 
 # Generate self-signed certificate in user-accessible location
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
