@@ -1,7 +1,7 @@
 services:
   code-server:
-    image: ghcr.io/chriopter/code-server-rails:main
-    container_name: code-server-rails
+    image: ghcr.io/chriopter/docker-code-server-rails:main
+    container_name: docker-code-server-rails
     ports:
       - "8443:8443"  # VS Code Server
       - "3000:3000"  # Rails app
