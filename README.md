@@ -29,6 +29,7 @@ In the VS Code terminal or when connected via `docker exec`:
 ```bash
 # Add aliases to the persistent file
 echo 'alias claude1="CLAUDE_CONFIG_DIR=/home/coder/.claude-profiles/1 claude"' >> ~/.bash_aliases
+echo 'alias claude1yolo="CLAUDE_CONFIG_DIR=/home/coder/.claude-profiles/1 claude --dangerously-skip-permissions"' >> ~/.bash_aliases
 # Load them immediately (only needed once)
 source /commandhistory/.bash_aliases
 ```
