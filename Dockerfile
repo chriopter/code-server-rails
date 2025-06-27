@@ -104,7 +104,13 @@ RUN mkdir -p /commandhistory && \
     echo '' >> /etc/bash.bashrc && \
     echo '# Force history settings even if VS Code overrides them' >> /etc/bash.bashrc && \
     echo 'export HISTFILE=/commandhistory/.bash_history' >> /etc/bash.bashrc && \
-    echo 'export PROMPT_COMMAND="history -a;${PROMPT_COMMAND}"' >> /etc/bash.bashrc
+    echo 'export PROMPT_COMMAND="history -a;${PROMPT_COMMAND}"' >> /etc/bash.bashrc && \
+    echo '' >> /etc/bash.bashrc && \
+    echo '# Force load aliases on each prompt for VS Code terminal' >> /etc/bash.bashrc && \
+    echo 'if [ -z "$ALIASES_LOADED" ]; then' >> /etc/bash.bashrc && \
+    echo '    test -f /commandhistory/.bash_aliases && source /commandhistory/.bash_aliases' >> /etc/bash.bashrc && \
+    echo '    export ALIASES_LOADED=1' >> /etc/bash.bashrc && \
+    echo 'fi' >> /etc/bash.bashrc
 
 # Generate self-signed certificate in user-accessible location
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
